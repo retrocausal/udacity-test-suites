@@ -1,0 +1,25 @@
+{
+  "name": "Jasmine-Suites",
+  "description": "udacity feed reader testing",
+  "main": "js/app.js",
+  "authors": [
+    "Nitin"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "feeds",
+    "jasmine"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
+}
