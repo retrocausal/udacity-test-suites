@@ -795,7 +795,7 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var globalErrors = null;
-    
+
     var installGlobalErrors = function() {
       if (globalErrors) {
         return;
@@ -5802,7 +5802,7 @@ getJasmineRequireObj().StackTrace = function(j$) {
       }
     }
   }
-  
+
   return StackTrace;
 };
 

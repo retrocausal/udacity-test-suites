@@ -20,6 +20,7 @@ $(function () {
      *tests require
      */
     beforeEach(() => {
+      this.env.addMatchers(customMatchers);
       Feeds = allFeeds;
       Iterations = Feeds[Symbol.iterator]();
     });
@@ -31,7 +32,7 @@ $(function () {
      * Feeds in app.js to be an empty array and refresh the
      * page?
      */
-    it('are defined', function () {
+    it('Are defined', function () {
       expect(Feeds)
         .toBeDefined();
       expect(Feeds.length)
@@ -41,7 +42,7 @@ $(function () {
 
     /* TODO: Write a test that loops through each feed
      * in the Feeds object and ensures it has a URL defined
-     * and that the URL is not empty.
+     * and that the URL is not empty. and that the URL is secure
      */
     it('Define a URL to fetch feeds from', () => {
       let next = Iterations.next();
@@ -49,6 +50,10 @@ $(function () {
         const Value = next.value;
         expect(Value.url)
           .toBeDefined();
+        expect(Value.url.length)
+          .not.toBe(0);
+        expect(Value.url)
+          .toBeSecure();
         next = Iterations.next();
       }
     });
@@ -57,23 +62,57 @@ $(function () {
      * in the Feeds object and ensures it has a name defined
      * and that the name is not empty.
      */
+    it('Name a feed', () => {
+      let next = Iterations.next();
+      while (!next.done && next.value) {
+        const Value = next.value;
+        expect(Value.name)
+          .toBeDefined();
+        expect(Value.name.length)
+          .not.toBe(0);
+        next = Iterations.next();
+      }
+    });
   });
+
+
 
 
   /* TODO: Write a new test suite named "The menu" */
 
-  /* TODO: Write a test that ensures the menu element is
-   * hidden by default. You'll have to analyze the HTML and
-   * the CSS to determine how we're performing the
-   * hiding/showing of the menu element.
-   */
+  describe('Feed Reader Menu', function () {
+    let menuIcon, body, classList;
 
-  /* TODO: Write a test that ensures the menu changes
-   * visibility when the menu icon is clicked. This test
-   * should have two expectations: does the menu display when
-   * clicked and does it hide when clicked again.
-   */
-
+    beforeEach(() => {
+      this.env.addMatchers(customMatchers);
+      menuIcon = $('.menu-icon-link');
+      body = document.querySelector('BODY');
+      classList = body.classList;
+      //spyOn(menuIcon, 'click');
+    });
+    /* TODO: Write a test that ensures the menu element is
+     * hidden by default. You'll have to analyze the HTML and
+     * the CSS to determine how we're performing the
+     * hiding/showing of the menu element.
+     */
+    it('Should be hidden at page load', () => {
+      expect(classList)
+        .toContain('menu-hidden');
+    });
+    /* TODO: Write a test that ensures the menu changes
+     * visibility when the menu icon is clicked. This test
+     * should have two expectations: does the menu display when
+     * clicked and does it hide when clicked again.
+     */
+    it('Should toggle visibility on click', () => {
+      menuIcon.trigger('click');
+      expect(classList)
+        .not.toContain('menu-hidden');
+      menuIcon.trigger('click');
+      expect(classList)
+        .toContain('menu-hidden');
+    });
+  });
   /* TODO: Write a new test suite named "Initial Entries" */
 
   /* TODO: Write a test that ensures when the loadFeed
