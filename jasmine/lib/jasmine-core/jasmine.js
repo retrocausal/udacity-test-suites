@@ -795,7 +795,7 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var globalErrors = null;
-
+    
     var installGlobalErrors = function() {
       if (globalErrors) {
         return;
@@ -1390,7 +1390,7 @@ getJasmineRequireObj().Env = function(j$) {
       // it() sometimes doesn't have a fn argument, so only check the type if
       // it's given.
       if (arguments.length > 1 && typeof fn !== 'undefined') {
-         ensureIsFunctionOrAsync(fn, 'it');
+        ensureIsFunctionOrAsync(fn, 'it');
       }
       var spec = specFactory(description, fn, currentDeclarationSuite, timeout);
       if (currentDeclarationSuite.markedPending) {
@@ -5802,7 +5802,7 @@ getJasmineRequireObj().StackTrace = function(j$) {
       }
     }
   }
-
+  
   return StackTrace;
 };
 
