@@ -8,12 +8,12 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
-$(function () {
+$(function() {
   /* This is our first test suite - a test suite just contains
    * a related set of tests. This suite is all about the RSS
    * feeds definitions, the Feeds variable in our application.
    */
-  describe('RSS Feeds', function () {
+  describe('RSS Feeds', function() {
     let Feeds, Iterations;
     /*
      *@beforeEach preps a test suite, with all the parameters any of it's IT
@@ -34,7 +34,7 @@ $(function () {
      * Feeds in app.js to be an empty array and refresh the
      * page?
      */
-    it('Are defined', function () {
+    it('Are defined', function() {
       expect(Feeds)
         .toBeDefined();
       expect(Feeds.length)
@@ -89,7 +89,7 @@ $(function () {
 
   /* SUITE: That defines all specs that should test behaviors for the off canvas menu*/
 
-  describe('Feed Reader Menu', function () {
+  describe('Feed Reader Menu', function() {
     let menuIcon, body, classList;
     /*
      *@beforeEach preps a test suite, with all the parameters any of it's IT
@@ -139,14 +139,58 @@ $(function () {
     });
   });
   /* SUITE that defines specs that test behavior of feed fetches and feed displays */
-
-  /* @SPEC: that ensures when the loadFeed
-   * function is called and completes its work, there is at least
-   * a single .entry element within the .feed container.
-   * Remember, loadFeed() is asynchronous so this test will require
-   * the use of Jasmine's beforeEach and asynchronous done() function.
-   */
-
+  describe('Feed Reader', function() {
+    let callBack, feed, entry, spy, fakeFeed;
+    /*
+     *@beforeEach preps a test suite, with all the parameters any of it's IT
+     *tests require
+     */
+    beforeEach(() => {
+      //add any custom matchers
+      this.env.addMatchers(customMatchers);
+      feed = $('.feed');
+      entry = feed.find('.entry');
+      spy = this.env.createSpy;
+      fakeFeed = [{
+        name: 'Udacity Blog',
+        url: 'http://blog.uuuuudacity.com/feeeeeeed'
+      }];
+      originalFeed = allFeeds;
+    });
+    afterEach(() => {
+      allFeeds = originalFeed;
+    });
+    it('handles ajax errors', (done) => {
+      allFeeds = fakeFeed;
+      let exceptionHandler = spy(logException);
+      callBack = () => {
+        expect(exceptionHandler).toHaveBeenCalled();
+        done();
+      };
+      spyOn($, 'ajax').and.callFake(() => {
+        loadFeed(0, callBack);
+      });
+    });
+    /* @SPEC: that ensures when the loadFeed
+     * function is called and completes its work, there is at least
+     * a single .entry element within the .feed container.
+     * Remember, loadFeed() is asynchronous so this test will require
+     * the use of Jasmine's beforeEach and asynchronous done() function.
+     * This spec accepts a done method from Jasmine that runs after the expectations are
+     * checked. It also overrided Jasmine's default time limit for an async spec to 10 and a quarter seconds
+     */
+    it('Populates at least one feed item', (done) => {
+        //define a callback to loadFeed, which is called after loadfeed succeeds, or fails
+        callBack = () => {
+          entry = feed.find('.entry');
+          expect(entry.length).toBeGreaterThan(0);
+          done();
+        };
+        loadFeed(0, callBack);
+      },
+      //Assign a rather high wait time, for we do not know the time required to fetch a feed
+      10250);
+  });
   /* TODO: Write a new test suite named "New Feed Selection" */
 
   /* TODO: Write a test that ensures when a new feed is loaded
