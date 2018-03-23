@@ -20,8 +20,10 @@ $(function () {
      *tests require
      */
     beforeEach(() => {
+      //Use custom matchers to identify if TLS/SSL is used
       this.env.addMatchers(customMatchers);
       Feeds = allFeeds;
+      //Iterator for allFeeds
       Iterations = Feeds[Symbol.iterator]();
     });
 
@@ -40,34 +42,41 @@ $(function () {
     });
 
 
-    /* TODO: Write a test that loops through each feed
+    /* @SPEC: that loops through each feed
      * in the Feeds object and ensures it has a URL defined
      * and that the URL is not empty. and that the URL is secure
      */
     it('Define a URL to fetch feeds from', () => {
       let next = Iterations.next();
+      //begin iterating
       while (!next.done && next.value) {
         const Value = next.value;
+        //url should be defined
         expect(Value.url)
           .toBeDefined();
+        //url should not be empty
         expect(Value.url.length)
           .not.toBe(0);
+        //url needs https
         expect(Value.url)
           .toBeSecure();
         next = Iterations.next();
       }
     });
 
-    /* TODO: Write a test that loops through each feed
+    /* @SPEC: that loops through each feed
      * in the Feeds object and ensures it has a name defined
      * and that the name is not empty.
      */
     it('Name a feed', () => {
       let next = Iterations.next();
+      //begin iterating
       while (!next.done && next.value) {
         const Value = next.value;
+        //name should be defined
         expect(Value.name)
           .toBeDefined();
+        //name should not be empty
         expect(Value.name.length)
           .not.toBe(0);
         next = Iterations.next();
@@ -78,19 +87,25 @@ $(function () {
 
 
 
-  /* TODO: Write a new test suite named "The menu" */
+  /* SUITE: That defines all specs that should test behaviors for the off canvas menu*/
 
   describe('Feed Reader Menu', function () {
     let menuIcon, body, classList;
-
+    /*
+     *@beforeEach preps a test suite, with all the parameters any of it's IT
+     *tests require
+     */
     beforeEach(() => {
+      //add any custom matchers
       this.env.addMatchers(customMatchers);
+      //define the menu element
       menuIcon = $('.menu-icon-link');
+      //define the classList to check for menu hide and reveal classes
       body = document.querySelector('BODY');
       classList = body.classList;
       //spyOn(menuIcon, 'click');
     });
-    /* TODO: Write a test that ensures the menu element is
+    /* @SPEC: that ensures the menu element is
      * hidden by default. You'll have to analyze the HTML and
      * the CSS to determine how we're performing the
      * hiding/showing of the menu element.
@@ -99,23 +114,33 @@ $(function () {
       expect(classList)
         .toContain('menu-hidden');
     });
-    /* TODO: Write a test that ensures the menu changes
+    /* @SPEC that ensures the menu changes
      * visibility when the menu icon is clicked. This test
      * should have two expectations: does the menu display when
      * clicked and does it hide when clicked again.
      */
     it('Should toggle visibility on click', () => {
-      menuIcon.trigger('click');
-      expect(classList)
-        .not.toContain('menu-hidden');
-      menuIcon.trigger('click');
-      expect(classList)
-        .toContain('menu-hidden');
+      let hidden = document.querySelector('.menu-hidden');
+      if (hidden) {
+        menuIcon.trigger('click');
+        expect(classList)
+          .not.toContain('menu-hidden');
+        menuIcon.trigger('click');
+        expect(classList)
+          .toContain('menu-hidden');
+      } else {
+        menuIcon.trigger('click');
+        expect(classList)
+          .toContain('menu-hidden');
+        menuIcon.trigger('click');
+        expect(classList)
+          .not.toContain('menu-hidden');
+      }
     });
   });
-  /* TODO: Write a new test suite named "Initial Entries" */
+  /* SUITE that defines specs that test behavior of feed fetches and feed displays */
 
-  /* TODO: Write a test that ensures when the loadFeed
+  /* @SPEC: that ensures when the loadFeed
    * function is called and completes its work, there is at least
    * a single .entry element within the .feed container.
    * Remember, loadFeed() is asynchronous so this test will require
