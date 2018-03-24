@@ -84,6 +84,7 @@ function loadFeed(id, cb) {
     dataType: "json"
   });
 }
+//Attaching an exception handler for jquery's ajax calls
 $(document).ajaxError(function(e, s, p, m) {
   console.log(e, s, p, m);
 })

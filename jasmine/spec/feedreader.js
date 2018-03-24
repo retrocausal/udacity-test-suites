@@ -138,6 +138,8 @@ $(function() {
       }
     });
   });
+
+
   /* SUITE that defines specs that test behavior of feed fetches and feed displays */
   describe('Feed Reader', function() {
     let callBack, feed, entry, spy, fakeFeed;
@@ -161,9 +163,15 @@ $(function() {
     });
     //Spec to ensure the ajax call includes an err handling method
     it('defines ajax error handlers', () => {
+      //spy on jquery's ajax calls, and ensure each ajax call is passed an object with a 'error' method
       spyOn($, 'ajax').and.callFake((object) => {
         expect(object.error).toBeDefined();
       });
+      //I fail to understand why we are using jasmine, when spies are badly coded.
+      //I can not spy on jquery's event handlers, and ensure they are called
+      //Jasmine dissappoints and is an epic fail!!
+
+      //For now, all I can do, is see if ajaxError is defined. I can not even test if theevent handler is attached
       expect($(document).ajaxError).toBeDefined();
       loadFeed(0);
     });
@@ -187,7 +195,9 @@ $(function() {
       //Assign a rather high wait time, for we do not know the time required to fetch a feed
       120000);
   });
-  /* TODO: Write a new test suite named "New Feed Selection" */
+
+
+  /* Suite: Write a new test suite named "New Feed Selection" */
   describe('New Feed Selection', function() {
     let currentFeed = 0,
       currentEntries, newEntries, availableFeeds;
@@ -214,7 +224,7 @@ $(function() {
       newEntries = new Set();
       loadFeed(currentFeed, callBack);
     }, 120000);
-    /* TODO: Write a test that ensures when a new feed is loaded
+    /* Spec: that ensures when a new feed is loaded
      * by the loadFeed function that the content actually changes.
      * Remember, loadFeed() is asynchronous.
      */
@@ -224,7 +234,7 @@ $(function() {
         newEntries = $('.feed').text();
         expect(newEntries).not.toMatch(currentEntries);
         expect(newEntries).not.toBe(null);
-        done();
+        done() TODO;
       };
       loadFeed(randomFeed, callBack);
       currentFeed = randomFeed;
