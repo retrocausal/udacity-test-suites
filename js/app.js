@@ -27,10 +27,8 @@ var allFeeds = [{
  */
 function init() {
   // Load the first feed we've defined (index of 0).
-  //loadFeed(0);
+  loadFeed(0);
 }
-
-function logException(msg) {}
 
 /* This function performs everything necessary to load a
  * feed using the Google Feed Reader API. It will then
@@ -43,6 +41,7 @@ function logException(msg) {}
 function loadFeed(id, cb) {
   var feedUrl = allFeeds[id].url,
     feedName = allFeeds[id].name;
+
   $.ajax({
     type: "POST",
     url: 'https://rsstojson.udacity.com/parseFeed',
@@ -76,9 +75,8 @@ function loadFeed(id, cb) {
       }
     },
     error: function(result, status, err) {
-      const message = `${result.status}:${err}`
-      logException(message);
       //run only the callback without attempting to parse result due to error
+      //$(document).ajaxError(() => {});
       if (cb) {
         cb();
       }
@@ -86,6 +84,9 @@ function loadFeed(id, cb) {
     dataType: "json"
   });
 }
+$(document).ajaxError(function(e, s, p, m) {
+  console.log(e, s, p, m);
+})
 
 /* Google API: Loads the Feed Reader API and defines what function
  * to call when the Feed Reader API is done loading.
@@ -113,7 +114,6 @@ $(function() {
   allFeeds.forEach(function(feed) {
     feed.id = feedId;
     feedList.append(feedItemTemplate(feed));
-
     feedId++;
   });
 

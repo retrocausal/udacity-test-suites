@@ -149,7 +149,6 @@ $(function() {
       //add any custom matchers
       this.env.addMatchers(customMatchers);
       feed = $('.feed');
-      entry = feed.find('.entry');
       spy = this.env.createSpy;
       fakeFeed = [{
         name: 'Udacity Blog',
@@ -160,16 +159,13 @@ $(function() {
     afterEach(() => {
       allFeeds = originalFeed;
     });
-    it('handles ajax errors', (done) => {
-      allFeeds = fakeFeed;
-      let exceptionHandler = spy(logException);
-      callBack = () => {
-        expect(exceptionHandler).toHaveBeenCalled();
-        done();
-      };
-      spyOn($, 'ajax').and.callFake(() => {
-        loadFeed(0, callBack);
+    //Spec to ensure the ajax call includes an err handling method
+    it('defines ajax error handlers', () => {
+      spyOn($, 'ajax').and.callFake((object) => {
+        expect(object.error).toBeDefined();
       });
+      expect($(document).ajaxError).toBeDefined();
+      loadFeed(0);
     });
     /* @SPEC: that ensures when the loadFeed
      * function is called and completes its work, there is at least
@@ -189,12 +185,49 @@ $(function() {
         loadFeed(0, callBack);
       },
       //Assign a rather high wait time, for we do not know the time required to fetch a feed
-      10250);
+      120000);
   });
   /* TODO: Write a new test suite named "New Feed Selection" */
-
-  /* TODO: Write a test that ensures when a new feed is loaded
-   * by the loadFeed function that the content actually changes.
-   * Remember, loadFeed() is asynchronous.
-   */
+  describe('New Feed Selection', function() {
+    let currentFeed = 0,
+      currentEntries, newEntries, availableFeeds;
+    /*
+     *@beforeEach preps a test suite, with all the parameters any of it's IT
+     *tests require
+     */
+    beforeEach((done) => {
+      //add any custom matchers
+      this.env.addMatchers(customMatchers);
+      const Feeds = $('.feed-list').find('li a');
+      availableFeeds = [];
+      for (const feed of Feeds) {
+        if ($(feed).attr('data-id') !== '' + currentFeed) {
+          availableFeeds.push($(feed).attr('data-id'));
+        }
+      }
+      callBack = () => {
+        //const Entries = $('.feed').find('.entry');
+        currentEntries = $('.feed').text();
+        done();
+      }
+      currentEntries = new Set();
+      newEntries = new Set();
+      loadFeed(currentFeed, callBack);
+    }, 120000);
+    /* TODO: Write a test that ensures when a new feed is loaded
+     * by the loadFeed function that the content actually changes.
+     * Remember, loadFeed() is asynchronous.
+     */
+    it('Updates Feed Entries', (done) => {
+      const randomFeed = availableFeeds[Math.floor(Math.random() * availableFeeds.length)];
+      callBack = () => {
+        newEntries = $('.feed').text();
+        expect(newEntries).not.toMatch(currentEntries);
+        expect(newEntries).not.toBe(null);
+        done();
+      };
+      loadFeed(randomFeed, callBack);
+      currentFeed = randomFeed;
+    }, 120000);
+  });
 }());
