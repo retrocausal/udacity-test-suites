@@ -17,7 +17,7 @@ const customMatchers = {
     //It does so, because, Jasmine is primitive
     //It uses the previous custom matcher that tests if a string begins with a substring
     return {
-      compare: function(actual, expected = 'http://') {
+      compare: function(actual, expected = 'https://') {
         let r = customMatchers.toBeginWith(util, customEqualityTesters)
           .compare(actual, expected);
         r.message = (r.pass) ? `Expected ${actual} to be secure and it is!` : `Expected ${actual} to be secure, but it is not.`;

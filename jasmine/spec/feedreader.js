@@ -234,7 +234,7 @@ $(function() {
         newEntries = $('.feed').text();
         expect(newEntries).not.toMatch(currentEntries);
         expect(newEntries).not.toBe(null);
-        done() TODO;
+        done();
       };
       loadFeed(randomFeed, callBack);
       currentFeed = randomFeed;
