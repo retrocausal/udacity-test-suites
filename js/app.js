@@ -42,7 +42,7 @@ function init() {
  */
 function loadFeed(id, cb) {
   if (typeof id !== 'number') {
-    throw ('Please input a numeric ID to fetch')
+    throw ('Please input a numeric ID to fetch');
   }
   var feedUrl = allFeeds[id].url,
     feedName = allFeeds[id].name;
@@ -90,9 +90,7 @@ function loadFeed(id, cb) {
   });
 }
 //Attaching an exception handler for jquery's ajax calls
-$(document).ajaxError(function(e, s, p, m) {
-  console.log(e, s, p, m);
-})
+$(document).ajaxError(function(e, s, p, m) {});
 
 /* Google API: Loads the Feed Reader API and defines what function
  * to call when the Feed Reader API is done loading.

@@ -23,6 +23,6 @@ const customMatchers = {
         r.message = (r.pass) ? `Expected ${actual} to be secure and it is!` : `Expected ${actual} to be secure, but it is not.`;
         return r;
       }
-    }
+    };
   }
 };

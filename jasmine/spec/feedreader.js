@@ -205,7 +205,7 @@ $(function() {
     it('Does not accept a non numeric or an empty input - and throws an exception', () => {
       const fakeInit = () => {
         loadFeed("0");
-      }
+      };
       expect(fakeInit).toThrow('Please input a numeric ID to fetch');
     });
   });
@@ -233,7 +233,7 @@ $(function() {
         //const Entries = $('.feed').find('.entry');
         currentEntries = $('.feed').text();
         done();
-      }
+      };
       currentEntries = '';
       newEntries = '';
       loadFeed(currentFeed, callBack);
