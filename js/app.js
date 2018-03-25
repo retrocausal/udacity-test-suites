@@ -27,7 +27,9 @@ var allFeeds = [{
  */
 function init() {
   // Load the first feed we've defined (index of 0).
-  loadFeed(0);
+  try {
+    loadFeed(0);
+  } catch (e) {}
 }
 
 /* This function performs everything necessary to load a
@@ -39,6 +41,9 @@ function init() {
  * which will be called after everything has run successfully.
  */
 function loadFeed(id, cb) {
+  if (typeof id !== 'number') {
+    throw ('Please input a numeric ID to fetch')
+  }
   var feedUrl = allFeeds[id].url,
     feedName = allFeeds[id].name;
 
@@ -126,7 +131,9 @@ $(function() {
     var item = $(this);
     $('body')
       .addClass('menu-hidden');
-    loadFeed(item.data('id'));
+    try {
+      loadFeed(item.data('id'));
+    } catch (e) {}
     return false;
   });
 

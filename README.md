@@ -22,3 +22,9 @@ In this project I am given a web-based application that reads RSS feeds. Because
 
    - click on the menu icon, and see if the feed list is presented and on selection, the feed list is hidden.
     - On selecting a feed from the menu, see if the content changes on the page
+## Handlebars
+Sometimes, the behavior of `handlebars.js` triggers a console warning.
+```
+A parser-blocking, cross site (i.e. different eTLD+1) script, http://cdn.jsdelivr.net/handlebarsjs/2.0.0/handlebars.min.js?cb=1521960741742&fingerprint=c2VwLW5vLXJlZGlyZWN0&onIframeFlag, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details.
+```
+**Note** : please refresh the page on such warnings

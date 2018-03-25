@@ -173,7 +173,7 @@ $(function() {
 
       //For now, all I can do, is see if ajaxError is defined. I can not even test if theevent handler is attached
       expect($(document).ajaxError).toBeDefined();
-      loadFeed(0);
+      init();
     });
     /* @SPEC: that ensures when the loadFeed
      * function is called and completes its work, there is at least
@@ -194,6 +194,20 @@ $(function() {
       },
       //Assign a rather high wait time, for we do not know the time required to fetch a feed
       120000);
+    //SPec that ensures, loadFeed needs a number input as id
+    it('Does not accept a non numeric or an empty input', () => {
+      spyOn(window, 'loadFeed').and.callFake((id, cb) => {
+        expect(id).not.toBe(null);
+        expect(id).toEqual(jasmine.any(Number));
+      });
+      init();
+    });
+    it('Does not accept a non numeric or an empty input - and throws an exception', () => {
+      const fakeInit = () => {
+        loadFeed("0");
+      }
+      expect(fakeInit).toThrow('Please input a numeric ID to fetch');
+    });
   });
 
 
@@ -220,8 +234,16 @@ $(function() {
         currentEntries = $('.feed').text();
         done();
       }
-      currentEntries = new Set();
-      newEntries = new Set();
+      currentEntries = '';
+      newEntries = '';
+      loadFeed(currentFeed, callBack);
+    }, 120000);
+
+    afterEach((done) => {
+      currentFeed = 0;
+      callBack = () => {
+        done();
+      };
       loadFeed(currentFeed, callBack);
     }, 120000);
     /* Spec: that ensures when a new feed is loaded
@@ -236,8 +258,11 @@ $(function() {
         expect(newEntries).not.toBe(null);
         done();
       };
-      loadFeed(randomFeed, callBack);
-      currentFeed = randomFeed;
+      try {
+        loadFeed(Number(randomFeed), callBack);
+      } catch (e) {
+        done();
+      }
     }, 120000);
   });
 }());
